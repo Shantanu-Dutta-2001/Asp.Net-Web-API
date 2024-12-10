@@ -442,11 +442,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shantanudutta/Full Stack/C# web Api/CollegeApp/CollegeApp.csproj",
+      "projectUniqueName": "/Users/shantanudutta/Full Stack/Asp.Net-Web-API/CollegeApp/CollegeApp.csproj",
       "projectName": "CollegeApp",
-      "projectPath": "/Users/shantanudutta/Full Stack/C# web Api/CollegeApp/CollegeApp.csproj",
+      "projectPath": "/Users/shantanudutta/Full Stack/Asp.Net-Web-API/CollegeApp/CollegeApp.csproj",
       "packagesPath": "/Users/shantanudutta/.nuget/packages/",
-      "outputPath": "/Users/shantanudutta/Full Stack/C# web Api/CollegeApp/obj/",
+      "outputPath": "/Users/shantanudutta/Full Stack/Asp.Net-Web-API/CollegeApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/shantanudutta/.nuget/NuGet/NuGet.Config"
