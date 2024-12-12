@@ -13,28 +13,58 @@ namespace CollegeAPI_CRUD.Controllers
     {
         [HttpGet]
         [Route("All")]
-        public IEnumerable<Student> GetStudents()
+        public ActionResult<IEnumerable<Student>> GetStudents()
         {
-            return StudentRepository.Students;
+            //Ok - 200 - Success
+            return Ok(StudentRepository.Students);
         }
 
         [HttpGet("{id:int}")]
-        public Student GetStudentById(int id)
+        public ActionResult<Student> GetStudentById(int id)
         {
-            return StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            // badRequest - 400 - BadRequest - Client Error
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+            var student = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            if (student == null)
+            {
+                // badRequest - 404 - NotFound - Client Error
+                return NotFound($"The student with id {id} not found");
+            }
+            //Ok - 200 - Success
+            return Ok(student);
         }
-        [HttpDelete("{id:int}")]
-        public bool DeleteStudentById(int id)
+        [HttpDelete]
+        [Route("{id:int}")]
+        public ActionResult<bool> DeleteStudentById(int id)
         {
+            // badRequest - 400 - BadRequest - Client Error
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
             var student = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
 
+            if (student == null)
+            {
+                // badRequest - 404 - NotFound - Client Error
+                return NotFound($"The student with id {id} not found");
+            }
             StudentRepository.Students.Remove(student);
 
-            return true;
+            //Ok - 200 - Success
+            return Ok(true);
         }
         [HttpPost]
+        [Route("AddStudent")]
         public ActionResult<Student> AddStudent([FromBody] Student model)
         {
+            if (model == null)
+            {
+                return BadRequest();
+            }
             int newId = StudentRepository.Students.LastOrDefault().StudentId + 1;
 
             Student stu = new Student
@@ -46,6 +76,7 @@ namespace CollegeAPI_CRUD.Controllers
             };
             StudentRepository.Students.Add(stu);
             model.StudentId = stu.StudentId;
+            //Ok - 200 - Success
             return Ok(model);
         }
     }
