@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CollegeAPI_CRUD.Model;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollegeAPI_CRUD.Controllers
@@ -71,6 +72,7 @@ namespace CollegeAPI_CRUD.Controllers
             {
                 StudentId = newId,
                 StudentName = model.StudentName,
+                Age = model.Age,
                 Address = model.Address,
                 Email = model.Email
             };
@@ -78,6 +80,63 @@ namespace CollegeAPI_CRUD.Controllers
             model.StudentId = stu.StudentId;
             //Ok - 200 - Success
             return Ok(model);
+        }
+
+        [HttpPut]
+        [Route("UpdateStudent")]
+        public ActionResult<Student> UpdateStudent([FromBody] Student model)
+        {
+            if (model == null || model.StudentId <= 0)
+            {
+                return BadRequest();
+            }
+            var existingStudent = StudentRepository.Students.Where(s => s.StudentId == model.StudentId).FirstOrDefault();
+            if (existingStudent == null)
+            {
+                return NotFound();
+            }
+            existingStudent.StudentName = model.StudentName;
+            existingStudent.Age = model.Age;
+            existingStudent.Email = model.Email;
+            existingStudent.Address = model.Address;
+            // existingStudent.AddmissionDate = model.AddmissionDate;
+
+            return Ok(existingStudent);
+        }
+        [HttpPatch]
+        [Route("{id:int}/UpdateStudentByPatch")]
+
+        public ActionResult<Student> UpdateStudentByPatch(int id, [FromBody] JsonPatchDocument<Student> patchDocument)
+        {
+            if (patchDocument == null || id <= 0)
+            {
+                return BadRequest();
+            }
+            var existingStudent = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            if (existingStudent == null)
+            {
+                return NotFound();
+            }
+            var student = new Student
+            {
+                StudentId = existingStudent.StudentId,
+                StudentName = existingStudent.StudentName,
+                Age = existingStudent.Age,
+                Email = existingStudent.Email,
+                Address = existingStudent.Address
+            };
+            patchDocument.ApplyTo(student, ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            existingStudent.StudentName = student.StudentName;
+            existingStudent.Age = student.Age;
+            existingStudent.Email = student.Email;
+            existingStudent.Address = student.Address;
+
+            return Ok(existingStudent);
         }
     }
 }

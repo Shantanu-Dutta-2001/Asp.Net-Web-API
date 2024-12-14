@@ -21,7 +21,7 @@ namespace CollegeAPI_CRUD.Model
         public string Email { get; set; }
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; }
-        [DateCheck]
-        public DateTime AddmissionDate { get; set; }
+        // [DateCheck]
+        // public DateTime AddmissionDate { get; set; }
     }
 }
