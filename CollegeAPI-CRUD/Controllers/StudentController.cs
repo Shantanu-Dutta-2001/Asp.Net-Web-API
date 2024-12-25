@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CollegeAPI_CRUD.Logger;
 using CollegeAPI_CRUD.Model;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,18 @@ namespace CollegeAPI_CRUD.Controllers
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
+        private readonly IMyLogger _myLogger;
+
+        public StudentController(IMyLogger myLogger)
+        {
+            _myLogger = myLogger;
+        }
         [HttpGet]
         [Route("All")]
         public ActionResult<IEnumerable<Student>> GetStudents()
         {
             //Ok - 200 - Success
+            _myLogger.Log("All students fetched");
             return Ok(StudentRepository.Students);
         }
 
