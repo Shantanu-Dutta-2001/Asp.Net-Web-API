@@ -13,18 +13,25 @@ namespace CollegeAPI_CRUD.Controllers
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
-        private readonly IMyLogger _myLogger;
+        // private readonly IMyLogger _myLogger;
 
-        public StudentController(IMyLogger myLogger)
+        // public StudentController(IMyLogger myLogger)
+        // {
+        //     _myLogger = myLogger;
+        // }
+        private readonly ILogger<StudentController> _logger;
+        public StudentController(ILogger<StudentController> logger)
         {
-            _myLogger = myLogger;
+            _logger = logger;
         }
+
         [HttpGet]
         [Route("All")]
         public ActionResult<IEnumerable<Student>> GetStudents()
         {
             //Ok - 200 - Success
-            _myLogger.Log("All students fetched");
+            // _myLogger.Log("All students fetched");
+            _logger.LogInformation("All students fetched");
             return Ok(StudentRepository.Students);
         }
 
@@ -34,12 +41,14 @@ namespace CollegeAPI_CRUD.Controllers
             // badRequest - 400 - BadRequest - Client Error
             if (id <= 0)
             {
+                _logger.LogWarning("Bad request in GetStudentById");
                 return BadRequest();
             }
             var student = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
             if (student == null)
             {
                 // badRequest - 404 - NotFound - Client Error
+                _logger.LogError("Student not found with given Id");
                 return NotFound($"The student with id {id} not found");
             }
             //Ok - 200 - Success
