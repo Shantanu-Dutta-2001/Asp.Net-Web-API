@@ -1,0 +1,5 @@
+2024-12-25 22:33:59.758 +05:30 [INF] Now listening on: https://localhost:7002
+2024-12-25 22:33:59.780 +05:30 [INF] Now listening on: http://localhost:5128
+2024-12-25 22:33:59.783 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-12-25 22:33:59.783 +05:30 [INF] Hosting environment: Development
+2024-12-25 22:33:59.783 +05:30 [INF] Content root path: /Users/shantanudutta/Full Stack/Asp.Net-Web-API/CollegeAPI-CRUD/

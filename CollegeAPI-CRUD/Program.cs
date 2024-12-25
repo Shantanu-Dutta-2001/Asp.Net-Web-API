@@ -1,6 +1,11 @@
 using CollegeAPI_CRUD.Logger;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration().WriteTo.File("Logger/log.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+
+// builder.Host.UseSerilog(); // Use when only serilog is required
+builder.Logging.AddSerilog(); // Use when we want both inbuit as well as serilog together
 
 // Add services to the container.
 
