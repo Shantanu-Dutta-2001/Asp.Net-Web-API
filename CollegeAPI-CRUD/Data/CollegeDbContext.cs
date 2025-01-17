@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CollegeAPI_CRUD.Data.Config;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollegeAPI_CRUD.Data
@@ -15,38 +16,7 @@ namespace CollegeAPI_CRUD.Data
         DbSet<Student> Students { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Student>().HasData(new List<Student>(){
-                new Student {
-                    Id = 1,
-                    Name = "Aarav",
-                    Address = "Gujarat,India",
-                    Email = "Aarav@gmail.in",
-                    DOB = new DateTime(2001,01,22)
-                },
-                new Student {
-                    Id = 2,
-                    Name = "Bishops",
-                    Address = "Melbourne,Australia",
-                    Email = "Bishops@gmail.com",
-                    DOB = new DateTime(2002,05,15)
-                },
-                 new Student {
-                    Id = 3,
-                    Name = "Chirag",
-                    Address = "Maharashtra,India",
-                    Email = "Chirag@gmail.in",
-                    DOB = new DateTime(2001,11,18)
-                }
-            });
-
-            modelBuilder.Entity<Student>(entity =>
-            {
-                entity.Property(n => n.Name).IsRequired();
-                entity.Property(n => n.Name).HasMaxLength(250);
-                entity.Property(n => n.Address).IsRequired(false).HasMaxLength(500);
-                entity.Property(n => n.Email).IsRequired().HasMaxLength(250);
-
-            });
+            modelBuilder.ApplyConfiguration(new StudentConfig());
         }
     }
 }
