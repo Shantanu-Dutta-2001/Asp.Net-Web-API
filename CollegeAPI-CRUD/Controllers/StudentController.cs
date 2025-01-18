@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CollegeAPI_CRUD.Data;
 using CollegeAPI_CRUD.Logger;
-using CollegeAPI_CRUD.Model;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +13,12 @@ namespace CollegeAPI_CRUD.Controllers
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
-        // private readonly IMyLogger _myLogger;
-
-        // public StudentController(IMyLogger myLogger)
-        // {
-        //     _myLogger = myLogger;
-        // }
         private readonly ILogger<StudentController> _logger;
-        public StudentController(ILogger<StudentController> logger)
+        private readonly CollegeDbContext _dbContext;
+        public StudentController(ILogger<StudentController> logger, CollegeDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -32,7 +28,7 @@ namespace CollegeAPI_CRUD.Controllers
             //Ok - 200 - Success
             // _myLogger.Log("All students fetched");
             _logger.LogInformation("All students fetched");
-            return Ok(StudentRepository.Students);
+            return Ok(_dbContext.Students);
         }
 
         [HttpGet("{id:int}")]
@@ -44,7 +40,7 @@ namespace CollegeAPI_CRUD.Controllers
                 _logger.LogWarning("Bad request in GetStudentById");
                 return BadRequest();
             }
-            var student = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            var student = _dbContext.Students.Where(s => s.Id == id).FirstOrDefault();
             if (student == null)
             {
                 // badRequest - 404 - NotFound - Client Error
@@ -63,14 +59,15 @@ namespace CollegeAPI_CRUD.Controllers
             {
                 return BadRequest();
             }
-            var student = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            var student = _dbContext.Students.Where(s => s.Id == id).FirstOrDefault();
 
             if (student == null)
             {
                 // badRequest - 404 - NotFound - Client Error
                 return NotFound($"The student with id {id} not found");
             }
-            StudentRepository.Students.Remove(student);
+            _dbContext.Students.Remove(student);
+            _dbContext.SaveChanges();
 
             //Ok - 200 - Success
             return Ok(true);
@@ -83,18 +80,9 @@ namespace CollegeAPI_CRUD.Controllers
             {
                 return BadRequest();
             }
-            int newId = StudentRepository.Students.LastOrDefault().StudentId + 1;
 
-            Student stu = new Student
-            {
-                StudentId = newId,
-                StudentName = model.StudentName,
-                Age = model.Age,
-                Address = model.Address,
-                Email = model.Email
-            };
-            StudentRepository.Students.Add(stu);
-            model.StudentId = stu.StudentId;
+            _dbContext.Students.Add(model);
+            _dbContext.SaveChanges();
             //Ok - 200 - Success
             return Ok(model);
         }
@@ -103,20 +91,19 @@ namespace CollegeAPI_CRUD.Controllers
         [Route("UpdateStudent")]
         public ActionResult<Student> UpdateStudent([FromBody] Student model)
         {
-            if (model == null || model.StudentId <= 0)
+            if (model == null || model.Id <= 0)
             {
                 return BadRequest();
             }
-            var existingStudent = StudentRepository.Students.Where(s => s.StudentId == model.StudentId).FirstOrDefault();
+            var existingStudent = _dbContext.Students.Where(s => s.Id == model.Id).FirstOrDefault();
             if (existingStudent == null)
             {
                 return NotFound();
             }
-            existingStudent.StudentName = model.StudentName;
-            existingStudent.Age = model.Age;
+            existingStudent.Name = model.Name;
             existingStudent.Email = model.Email;
             existingStudent.Address = model.Address;
-            // existingStudent.AddmissionDate = model.AddmissionDate;
+            _dbContext.SaveChanges();
 
             return Ok(existingStudent);
         }
@@ -129,16 +116,15 @@ namespace CollegeAPI_CRUD.Controllers
             {
                 return BadRequest();
             }
-            var existingStudent = StudentRepository.Students.Where(s => s.StudentId == id).FirstOrDefault();
+            var existingStudent = _dbContext.Students.Where(s => s.Id == id).FirstOrDefault();
             if (existingStudent == null)
             {
                 return NotFound();
             }
             var student = new Student
             {
-                StudentId = existingStudent.StudentId,
-                StudentName = existingStudent.StudentName,
-                Age = existingStudent.Age,
+                Id = existingStudent.Id,
+                Name = existingStudent.Name,
                 Email = existingStudent.Email,
                 Address = existingStudent.Address
             };
@@ -148,10 +134,10 @@ namespace CollegeAPI_CRUD.Controllers
                 return BadRequest(ModelState);
             }
 
-            existingStudent.StudentName = student.StudentName;
-            existingStudent.Age = student.Age;
+            existingStudent.Name = student.Name;
             existingStudent.Email = student.Email;
             existingStudent.Address = student.Address;
+            _dbContext.SaveChanges();
 
             return Ok(existingStudent);
         }

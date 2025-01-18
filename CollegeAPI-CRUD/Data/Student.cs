@@ -10,9 +10,9 @@ namespace CollegeAPI_CRUD.Data
     public class Student
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string Address { get; set; }
         public DateTime DOB { get; set; }
 
     }
