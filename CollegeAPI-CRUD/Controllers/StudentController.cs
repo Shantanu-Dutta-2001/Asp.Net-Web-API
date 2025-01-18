@@ -6,6 +6,7 @@ using CollegeAPI_CRUD.Data;
 using CollegeAPI_CRUD.Logger;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollegeAPI_CRUD.Controllers
 {
@@ -95,15 +96,24 @@ namespace CollegeAPI_CRUD.Controllers
             {
                 return BadRequest();
             }
-            var existingStudent = _dbContext.Students.Where(s => s.Id == model.Id).FirstOrDefault();
+            var existingStudent = _dbContext.Students.AsNoTracking().Where(s => s.Id == model.Id).FirstOrDefault();
             if (existingStudent == null)
             {
                 return NotFound();
             }
-            existingStudent.Name = model.Name;
-            existingStudent.Email = model.Email;
-            existingStudent.Address = model.Address;
+            var neWRecordToUpdate = new Student()
+            {
+                Id = existingStudent.Id,
+                Name = model.Name,
+                Email = model.Email,
+                Address = model.Address,
+                DOB = model.DOB
+            };
+            _dbContext.Students.Update(neWRecordToUpdate);
             _dbContext.SaveChanges();
+            // existingStudent.Name = model.Name;
+            // existingStudent.Email = model.Email;
+            // existingStudent.Address = model.Address;
 
             return Ok(existingStudent);
         }
