@@ -145,3 +145,4 @@ FROM [Students] AS [s]
 2025-01-18 09:39:56.319 +05:30 [INF] Executed action CollegeAPI_CRUD.Controllers.StudentController.GetStudents (CollegeAPI-CRUD) in 313.9393ms
 2025-01-18 09:39:56.319 +05:30 [INF] Executed endpoint 'CollegeAPI_CRUD.Controllers.StudentController.GetStudents (CollegeAPI-CRUD)'
 2025-01-18 09:39:56.319 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7002/api/Student/All - 200 327 application/json; charset=utf-8 317.2952ms
+2025-01-18 10:58:53.504 +05:30 [INF] Application is shutting down...

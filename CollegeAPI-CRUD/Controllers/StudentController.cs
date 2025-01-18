@@ -16,10 +16,12 @@ namespace CollegeAPI_CRUD.Controllers
     {
         private readonly ILogger<StudentController> _logger;
         private readonly CollegeDbContext _dbContext;
-        public StudentController(ILogger<StudentController> logger, CollegeDbContext dbContext)
+        private readonly IMapper _mapper;
+        public StudentController(ILogger<StudentController> logger, CollegeDbContext dbContext, IMapper mapper)
         {
             _logger = logger;
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -28,6 +30,12 @@ namespace CollegeAPI_CRUD.Controllers
         {
             //Ok - 200 - Success
             // _myLogger.Log("All students fetched");
+
+            // For auto mapper 
+            // var students = _dbContext.Students;
+            // var studentDtoData = _mapper.Map<List<StudentDTO>>(students);
+
+
             _logger.LogInformation("All students fetched");
             return Ok(_dbContext.Students);
         }
