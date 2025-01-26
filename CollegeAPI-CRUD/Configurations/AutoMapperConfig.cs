@@ -18,7 +18,12 @@ namespace CollegeAPI_CRUD.Configurations
 
             // Way 2: Map to and fro at once using reverseMap
             // CreateMap<StudentDTO, Student>().ReverseMap();
+
+            //config for different property name 
             CreateMap<StudentDTO, Student>().ReverseMap().ForMember(n => n.StudentName, opt => opt.MapFrom(x => x.Name));
+
+            //config for ignoring some property
+            // CreateMap<StudentDTO, Student>().ReverseMap().ForMember(n => n.StudentName, opt => opt.Ignore());
         }
     }
 }
