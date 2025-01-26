@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CollegeAPI_CRUD.Controllers;
+using CollegeAPI_CRUD.Data;
 
 namespace CollegeAPI_CRUD.Configurations
 {
@@ -16,6 +18,7 @@ namespace CollegeAPI_CRUD.Configurations
 
             // Way 2: Map to and fro at once using reverseMap
             // CreateMap<StudentDTO, Student>().ReverseMap();
+            CreateMap<StudentDTO, Student>().ReverseMap().ForMember(n => n.StudentName, opt => opt.MapFrom(x => x.Name));
         }
     }
 }
