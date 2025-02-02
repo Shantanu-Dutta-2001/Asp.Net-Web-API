@@ -43,6 +43,8 @@ namespace CollegeAPI_CRUD.Data.Config
                     DOB = new DateTime(2001,11,18)
                 }
             });
+
+            builder.HasOne(n => n.Department).WithMany(n => n.Students).HasForeignKey(n => n.DepartmentId).HasConstraintName("FK_Students_Departments");
         }
 
     }

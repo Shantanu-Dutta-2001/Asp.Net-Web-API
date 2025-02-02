@@ -14,9 +14,11 @@ namespace CollegeAPI_CRUD.Data
 
         }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Department> Departments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new StudentConfig());
+            modelBuilder.ApplyConfiguration(new DepartmentConfig());
         }
     }
 }

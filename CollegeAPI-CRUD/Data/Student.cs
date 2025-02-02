@@ -14,6 +14,8 @@ namespace CollegeAPI_CRUD.Data
         public required string Email { get; set; }
         public required string Address { get; set; }
         public DateTime DOB { get; set; }
+        public int? DepartmentId { get; set; }
+        public virtual Department? Department { get; set; }
 
     }
 }
