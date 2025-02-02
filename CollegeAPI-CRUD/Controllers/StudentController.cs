@@ -33,8 +33,8 @@ namespace CollegeAPI_CRUD.Controllers
             // _myLogger.Log("All students fetched");
 
             // For auto mapper 
-            var students = _dbContext.Students;
-            var studentDtoData = _mapper.Map<List<StudentDTO>>(students);
+            // var students = _dbContext.Students;
+            // var studentDtoData = _mapper.Map<List<StudentDTO>>(students);
 
 
             _logger.LogInformation("All students fetched");
